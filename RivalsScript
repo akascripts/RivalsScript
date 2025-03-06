@@ -13,6 +13,7 @@ end
 -- UI Elements
 local ScreenGui = Instance.new("ScreenGui")
 local Frame = Instance.new("Frame")
+local Announcement = Instance.new("TextButton") -- Announcement button
 local TextBox = Instance.new("TextBox")
 local CheckKey = Instance.new("TextButton")
 local CopyKey = Instance.new("TextButton")
@@ -21,6 +22,7 @@ local Notification = Instance.new("TextLabel") -- Notification label
 -- Parent setup
 ScreenGui.Parent = player:WaitForChild("PlayerGui")
 Frame.Parent = ScreenGui
+Announcement.Parent = ScreenGui
 TextBox.Parent = Frame
 CheckKey.Parent = Frame
 CopyKey.Parent = Frame
@@ -32,6 +34,14 @@ Frame.Position = UDim2.new(0.5, -175, 0.5, -75)
 Frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 Frame.BorderSizePixel = 2
 Frame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+
+Announcement.Size = UDim2.new(0, 350, 0, 40)
+Announcement.Position = UDim2.new(0.5, -175, 0.1, -40) -- Closer to the main GUI
+Announcement.BackgroundColor3 = Color3.fromRGB(0, 120, 255) -- Blue button
+Announcement.TextColor3 = Color3.fromRGB(255, 255, 255) -- White text
+Announcement.Font = Enum.Font.SourceSansBold
+Announcement.TextScaled = true
+Announcement.Text = "GET A PERM KEY HERE"
 
 TextBox.Size = UDim2.new(0, 250, 0, 30)
 TextBox.Position = UDim2.new(0.5, -125, 0.2, 0)
@@ -97,6 +107,19 @@ CopyKey.MouseButton1Click:Connect(function()
         setclipboard("https://link-center.net/1302195/rivals-key")
         
         -- Show notification
+        Notification.Visible = true
+        task.wait(2) -- Keep it visible for 2 seconds
+        Notification.Visible = false
+    end
+end)
+
+-- Open Discord link when clicking the announcement button
+Announcement.MouseButton1Click:Connect(function()
+    if setclipboard then
+        setclipboard("https://discord.gg/pEN9bhkpW7")
+        
+        -- Show notification
+        Notification.Text = "Discord link copied!"
         Notification.Visible = true
         task.wait(2) -- Keep it visible for 2 seconds
         Notification.Visible = false

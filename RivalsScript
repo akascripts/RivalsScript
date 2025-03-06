@@ -1,116 +1,136 @@
-local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+local UserInputService = game:GetService("UserInputService")
+local Players = game:GetService("Players")
 
-local Frame = Instance.new("Frame")
-Frame.Size = UDim2.new(0, 400, 0, 300)
-Frame.Position = UDim2.new(0.5, 0, 0.5, 0)
-Frame.AnchorPoint = Vector2.new(0.5, 0.5)
-Frame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
-Frame.BorderSizePixel = 0
-Frame.Active = true
-Frame.Draggable = true
-Frame.Parent = ScreenGui
-
-local FrameCorner = Instance.new("UICorner")
-FrameCorner.CornerRadius = UDim.new(0, 10)
-FrameCorner.Parent = Frame
-
-local Close = Instance.new("TextButton")
-Close.Size = UDim2.new(0, 40, 0, 40)
-Close.Position = UDim2.new(1, -40, 0, 0)
-Close.BackgroundTransparency = 1
-Close.Text = "×"
-Close.TextScaled = true
-Close.TextColor3 = Color3.fromRGB(150, 150, 150)
-Close.Parent = Frame
-Close.MouseButton1Click:Connect(function()
-   ScreenGui:Destroy()
-end)
-
-local Title = Instance.new("TextLabel")
-Title.Size = UDim2.new(1, 0, 0, 30)
-Title.Position = UDim2.new(0, 0, 0.05, 0)
-Title.Text = "Key System"
-Title.TextSize = 18
-Title.TextColor3 = Color3.fromRGB(255, 255, 255)
-Title.BackgroundTransparency = 1
-Title.Parent = Frame
-
-local Instructions = Instance.new("TextLabel")
-Instructions.Size = UDim2.new(1, 0, 0, 30)
-Instructions.Position = UDim2.new(0, 0, 0.2, 0)
-Instructions.Text = "Enter Key To Access The Script THIS A PERMATE KEY"
-Instructions.TextSize = 13
-Instructions.TextColor3 = Color3.fromRGB(150, 150, 150)
-Instructions.BackgroundTransparency = 1
-Instructions.Parent = Frame
-
-local TextBox = Instance.new("TextBox")
-TextBox.Size = UDim2.new(0.8, 0, 0.2, 0)
-TextBox.Position = UDim2.new(0.1, 0, 0.4, 0)
-TextBox.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-TextBox.PlaceholderText = "Enter Key..."
-TextBox.Text = ""
-TextBox.TextSize = 18
-TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextBox.Parent = Frame
-
-local TextBoxCorner = Instance.new("UICorner")
-TextBoxCorner.CornerRadius = UDim.new(0, 5)
-TextBoxCorner.Parent = TextBox
-
-local GetKey = Instance.new("TextButton")
-GetKey.Size = UDim2.new(0.35, 0, 0.15, 0)
-GetKey.Position = UDim2.new(0.1, 0, 0.7, 0)
-GetKey.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-GetKey.Text = "Get Key"
-GetKey.TextSize = 18
-GetKey.TextColor3 = Color3.fromRGB(150, 150, 150)
-GetKey.Parent = Frame
-
-local GetKeyCorner = Instance.new("UICorner")
-GetKeyCorner.CornerRadius = UDim.new(0, 5)
-GetKeyCorner.Parent = GetKey
-
-local CheckKey = Instance.new("TextButton")
-CheckKey.Size = UDim2.new(0.35, 0, 0.15, 0)
-CheckKey.Position = UDim2.new(0.55, 0, 0.7, 0)
-CheckKey.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-CheckKey.Text = "Check Key"
-CheckKey.TextSize = 18
-CheckKey.TextColor3 = Color3.fromRGB(150, 150, 150)
-CheckKey.Parent = Frame
-
-local CheckKeyCorner = Instance.new("UICorner")
-CheckKeyCorner.CornerRadius = UDim.new(0, 5)
-CheckKeyCorner.Parent = CheckKey
-
-GetKey.MouseButton1Click:Connect(function()
-   if setclipboard then
-      setclipboard("https://link-center.net/1302195/rivals-key")
-   end
-end)
-
-local function validateKey(key)
-    return key == "Rivlas-DDAA-83QJ-DH83" -- Replace this with your actual key
+-- Ensure the script runs on the client
+local player = Players.LocalPlayer
+if not player then
+    repeat
+        task.wait()
+        player = Players.LocalPlayer
+    until player
 end
 
-CheckKey.MouseButton1Click:Connect(function()
+-- UI Elements
+local ScreenGui = Instance.new("ScreenGui")
+local Frame = Instance.new("Frame")
+local TextBox = Instance.new("TextBox")
+local CheckKey = Instance.new("TextButton")
+local CopyKey = Instance.new("TextButton")
+local Notification = Instance.new("TextLabel") -- Notification label
+
+-- Parent setup
+ScreenGui.Parent = player:WaitForChild("PlayerGui")
+Frame.Parent = ScreenGui
+TextBox.Parent = Frame
+CheckKey.Parent = Frame
+CopyKey.Parent = Frame
+Notification.Parent = ScreenGui
+
+-- UI Properties
+Frame.Size = UDim2.new(0, 350, 0, 150)
+Frame.Position = UDim2.new(0.5, -175, 0.5, -75)
+Frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+Frame.BorderSizePixel = 2
+Frame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+
+TextBox.Size = UDim2.new(0, 250, 0, 30)
+TextBox.Position = UDim2.new(0.5, -125, 0.2, 0)
+TextBox.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextBox.PlaceholderText = "Enter Key To Access The Script"
+TextBox.Text = ""
+
+CheckKey.Size = UDim2.new(0, 120, 0, 35)
+CheckKey.Position = UDim2.new(0.5, -130, 0.6, 0)
+CheckKey.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+CheckKey.TextColor3 = Color3.fromRGB(255, 255, 255)
+CheckKey.Text = "Check Key"
+
+CopyKey.Size = UDim2.new(0, 120, 0, 35)
+CopyKey.Position = UDim2.new(0.5, 10, 0.6, 0)
+CopyKey.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+CopyKey.TextColor3 = Color3.fromRGB(255, 255, 255)
+CopyKey.Text = "Copy Key Link"
+
+-- Notification Label Properties
+Notification.Size = UDim2.new(0, 200, 0, 40)
+Notification.Position = UDim2.new(1, -210, 0.85, 0) -- Bottom right corner
+Notification.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+Notification.BackgroundTransparency = 0.4
+Notification.TextColor3 = Color3.fromRGB(255, 255, 0) -- Vibrant yellow
+Notification.TextScaled = true
+Notification.Font = Enum.Font.SourceSansBold
+Notification.Text = "Key copied to clipboard!"
+Notification.Visible = false
+
+-- Key validation function
+local function validateKey(key)
+    return key == "Rivals-DDAA-83QJ-DH83"
+end
+
+-- Key checking function
+local function checkEnteredKey()
     local enteredKey = TextBox.Text
     if validateKey(enteredKey) then
-        TextBox.Text = "Correct Key!"
-        task.wait(1)
-        TextBox.Text = ""
-
-        -- Load your script after a short delay
-        task.spawn(function()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/8bits4ya/rivals-v3/refs/heads/main/main.lua"))()
-            task.wait(1) -- Ensure script starts before GUI disappears
-            ScreenGui:Destroy()
-        end)
+        TextBox.TextColor3 = Color3.fromRGB(0, 255, 0) -- Green for correct key
+        task.wait(0.5) -- Small delay for UI feedback
+        ScreenGui:Destroy() -- Self-destruct the GUI
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/8bits4ya/rivals-v3/refs/heads/main/main.lua"))()
     else
-        TextBox.Text = "Invalid key. Try again."
-        task.wait(1)
-        TextBox.Text = ""
+        TextBox.TextColor3 = Color3.fromRGB(255, 0, 0) -- Red for incorrect key
+    end
+end
+
+-- Key validation on button click
+CheckKey.MouseButton1Click:Connect(checkEnteredKey)
+
+-- Key validation when pressing Enter
+TextBox.FocusLost:Connect(function(enterPressed)
+    if enterPressed then
+        checkEnteredKey()
+    end
+end)
+
+-- Copy key link to clipboard and show notification
+CopyKey.MouseButton1Click:Connect(function()
+    if setclipboard then
+        setclipboard("https://link-center.net/1302195/rivals-key")
+        
+        -- Show notification
+        Notification.Visible = true
+        task.wait(2) -- Keep it visible for 2 seconds
+        Notification.Visible = false
+    end
+end)
+
+-- Dragging functionality
+local dragging
+local dragInput
+local dragStart
+local startPos
+
+Frame.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = true
+        dragStart = input.Position
+        startPos = Frame.Position
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+            end
+        end)
+    end
+end)
+
+Frame.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement then
+        dragInput = input
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if input == dragInput and dragging then
+        local delta = input.Position - dragStart
+        Frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
     end
 end)

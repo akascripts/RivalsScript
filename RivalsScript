@@ -17,7 +17,8 @@ local Announcement = Instance.new("TextButton") -- Announcement button
 local TextBox = Instance.new("TextBox")
 local CheckKey = Instance.new("TextButton")
 local CopyKey = Instance.new("TextButton")
-local Notification = Instance.new("TextLabel") -- Notification label
+local NotificationKey = Instance.new("TextLabel") -- Notification for key link
+local NotificationDiscord = Instance.new("TextLabel") -- Notification for Discord link
 
 -- Parent setup
 ScreenGui.Parent = player:WaitForChild("PlayerGui")
@@ -26,7 +27,8 @@ Announcement.Parent = ScreenGui
 TextBox.Parent = Frame
 CheckKey.Parent = Frame
 CopyKey.Parent = Frame
-Notification.Parent = ScreenGui
+NotificationKey.Parent = ScreenGui
+NotificationDiscord.Parent = ScreenGui
 
 -- UI Properties
 Frame.Size = UDim2.new(0, 350, 0, 150)
@@ -62,16 +64,27 @@ CopyKey.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
 CopyKey.TextColor3 = Color3.fromRGB(255, 255, 255)
 CopyKey.Text = "Copy Key Link"
 
--- Notification Label Properties
-Notification.Size = UDim2.new(0, 200, 0, 40)
-Notification.Position = UDim2.new(1, -210, 0.85, 0) -- Bottom right corner
-Notification.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-Notification.BackgroundTransparency = 0.4
-Notification.TextColor3 = Color3.fromRGB(255, 255, 0) -- Vibrant yellow
-Notification.TextScaled = true
-Notification.Font = Enum.Font.SourceSansBold
-Notification.Text = "Key copied to clipboard!"
-Notification.Visible = false
+-- Notification Label Properties for Key Link
+NotificationKey.Size = UDim2.new(0, 200, 0, 40)
+NotificationKey.Position = UDim2.new(1, -210, 0.85, 0) -- Bottom right corner
+NotificationKey.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+NotificationKey.BackgroundTransparency = 0.4
+NotificationKey.TextColor3 = Color3.fromRGB(255, 255, 0) -- Vibrant yellow
+NotificationKey.TextScaled = true
+NotificationKey.Font = Enum.Font.SourceSansBold
+NotificationKey.Text = "Key link copied!"
+NotificationKey.Visible = false
+
+-- Notification Label Properties for Discord Link
+NotificationDiscord.Size = UDim2.new(0, 200, 0, 40)
+NotificationDiscord.Position = UDim2.new(1, -210, 0.9, 0) -- Slightly above the other notification
+NotificationDiscord.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+NotificationDiscord.BackgroundTransparency = 0.4
+NotificationDiscord.TextColor3 = Color3.fromRGB(255, 255, 0) -- Vibrant yellow
+NotificationDiscord.TextScaled = true
+NotificationDiscord.Font = Enum.Font.SourceSansBold
+NotificationDiscord.Text = "Discord link copied!"
+NotificationDiscord.Visible = false
 
 -- Key validation function
 local function validateKey(key)
@@ -106,10 +119,10 @@ CopyKey.MouseButton1Click:Connect(function()
     if setclipboard then
         setclipboard("https://link-center.net/1302195/rivals-key")
         
-        -- Show notification
-        Notification.Visible = true
+        -- Show notification for Key Link
+        NotificationKey.Visible = true
         task.wait(2) -- Keep it visible for 2 seconds
-        Notification.Visible = false
+        NotificationKey.Visible = false
     end
 end)
 
@@ -118,11 +131,10 @@ Announcement.MouseButton1Click:Connect(function()
     if setclipboard then
         setclipboard("https://discord.gg/pEN9bhkpW7")
         
-        -- Show notification
-        Notification.Text = "Discord link copied!"
-        Notification.Visible = true
+        -- Show notification for Discord Link
+        NotificationDiscord.Visible = true
         task.wait(2) -- Keep it visible for 2 seconds
-        Notification.Visible = false
+        NotificationDiscord.Visible = false
     end
 end)
 
